@@ -1,0 +1,35 @@
+app.get("/user", (req, res) => {
+    res.send("Test api is called")
+})
+
+app.get("/test", (req, res) => {
+    res.json({ id: 1, name: "Saumya" })
+})
+var users = [
+    { id: 1, name: "Saumya", age: 19 },
+    { id: 2, name: "Ram", age: 18 },
+    { id: 3, name: "Shyam", age: 54 },
+    { id: 4, name: "Raj", age: 23 }
+]
+app.get("/users", (req, res) => {
+    res.json({ message: "Data Fetch Successfully", data: users })
+})
+var get = users.map((user) => {
+    return `<tr>
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.age}</td>
+            </tr>`
+}).join(" ")
+app.get("/usertable", (req, res) => {
+    res.set("content-type", "text/html")
+    res.send(`<table border = "1"
+           
+                <tr>
+                    <th>Id </th>
+                    <th>Name </th>
+                    <th>Age </th>
+                 </tr>
+                ${get}
+        `)
+})
