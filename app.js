@@ -1,7 +1,8 @@
 const express = require("express")
 
 const app = express() // ap makes the function of the express which can be accessible in the app.listen..
-
+const getDbConnection = require("./src/utilites/DbConnection")
+getDbConnection()
 const userRoutes = require("./src/routes/UserRoutes")
 app.use("/user",userRoutes)
 
