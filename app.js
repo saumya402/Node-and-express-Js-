@@ -8,7 +8,7 @@ app.use("/user",userRoutes)
 
 const EmployeeRoutes = require("./src/routes/EmployeeRoutes")
 app.use("/Employees",EmployeeRoutes)
-const PORT = 3000
+const PORT = 3000    
 
 app.listen(PORT, () => {
     console.log(`Port running on ${PORT}`)

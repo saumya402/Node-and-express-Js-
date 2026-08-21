@@ -1,15 +1,27 @@
 
 
 const userModel = require("../models/UserModel")
-const getAllUSers = async(req, res) => {
+const getAllUSers = async (req, res) => {
     const users = await userModel.find()
-     res.json({message:"get all users..",data:users})
+    res.json({ message: "get all users..", data: users })
 }
-const getUSerById = (req,res)=>{
-    res.json({message : `Value in wildcard id ${req.params.id}`})
-}
+const getUSerById = async (req, res) => {
+    const id = req.params.id;
 
+    // const foundUser = await userModel.findOne({_id : id})
+    const foundUser = await userModel.findById(id)
+    if (foundUser) {
+        res.json({ message: "User found ", data: foundUser })
+    } else {
+        res.json({ message: "User not found " })
+    }
+
+}
+const SearchUser = async (req, res) => {
+    const data = req.query;
+    res.json({ data: data })
+}
 
 module.exports = {
-    getAllUSers,getUSerById
+    getAllUSers, getUSerById, SearchUser
 }
