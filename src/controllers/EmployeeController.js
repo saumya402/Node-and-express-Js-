@@ -18,7 +18,13 @@ const Search = async(req,res)=>{
         res.json({data : data})
         
 }
+const create = async(req,res)=>{
+     res.json({message:"ok"})
+    const Fetch = await EmployeeModel.insertOne(req.body)
+
+    res.json({message : "Done",data : Fetch })
+}
 
 module.exports = {
-    getEmployeeById, getAllEmp , Search
+    getEmployeeById, getAllEmp , Search , create
 }
