@@ -1,5 +1,4 @@
 
-
 const userModel = require("../models/UserModel")
 const getAllUSers = async (req, res) => {
     const users = await userModel.find()
@@ -22,10 +21,15 @@ const SearchUser = async (req, res) => {
     res.json({ data: data })
 }
 const CreateUser = async(req,res)=>{
+    try{
     // console.log("Req body",req.body)
     res.json({message:"ok"})
     const savedUser = userModel.insertOne(req.body)
     res.json({message : "Data fetch from postman",data:savedUser})
+    }
+    catch(err) {
+        res.json({err:err})
+    }
 }
 
 
