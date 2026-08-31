@@ -5,4 +5,7 @@ router.get("/users",userController.getAllUSers)
 router.get("/user/:id",userController.getUSerById)
 router.get("/Search",userController.SearchUser)
 router.post("/user",userController.CreateUser)
-module.exports = router;
+router.delete("/user/:id",userController.DeleteUser)
+router.put("/user/:id",userController.UpdateUSer)
+router.put("/userByAge/:age",userController.UpdateByAge)
+module.exports = router;          

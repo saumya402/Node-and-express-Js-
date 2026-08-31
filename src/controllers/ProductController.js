@@ -14,6 +14,23 @@ const createProduct = async (req, res) => {
         })
     }
 }
+// const createProduct = async(req,res)=>{
+    // try{
+        // // const savedProduct = await ProductModel.create() or 
+        // const SavedProduct = await ProductModel.insertOne(req.body)
+        // res.status(201).json({
+        //     message : "Data added successfully",
+        //     data : SavedProduct
+        // })
+        // catch(err){
+        //     res.json({
+        //         message : "Error while creating product"
+
+        //     })
+        // }
+    // }
+    // 
+    // }
 
 const getAllProduct = async (req, res) => {
     try {
