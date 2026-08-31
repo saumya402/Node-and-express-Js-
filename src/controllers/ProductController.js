@@ -15,22 +15,22 @@ const createProduct = async (req, res) => {
     }
 }
 // const createProduct = async(req,res)=>{
-    // try{
-        // // const savedProduct = await ProductModel.create() or 
-        // const SavedProduct = await ProductModel.insertOne(req.body)
-        // res.status(201).json({
-        //     message : "Data added successfully",
-        //     data : SavedProduct
-        // })
-        // catch(err){
-        //     res.json({
-        //         message : "Error while creating product"
+// try{
+// // const savedProduct = await ProductModel.create() or 
+// const SavedProduct = await ProductModel.insertOne(req.body)
+// res.status(201).json({
+//     message : "Data added successfully",
+//     data : SavedProduct
+// })
+// catch(err){
+//     res.json({
+//         message : "Error while creating product"
 
-        //     })
-        // }
-    // }
-    // 
-    // }
+//     })
+// }
+// }
+// 
+// }
 
 const getAllProduct = async (req, res) => {
     try {
@@ -53,7 +53,26 @@ const getAllProduct = async (req, res) => {
         })
     }
 }
+const updateStockStatus = async (req, res) => {
+    try {
+        const UpdatedStockStatus = await ProductModel.updateMany({ stock: 0 }, { $set: { stockStatus: "out of stock" } })
+        const UpdatedStockStatus2 = await ProductModel.updateMany({ stock: { $lt: 10 } }, { $set: { stockStatus: "low" } })
+        const UpdatedStockStatus3 = await ProductModel.updateMany({ stock: { $gt: 10 } }, { $set: {stockStatus: "available" } })
+
+            res.status(200).json({
+                message: "Updated Stock successfully",
+                data: UpdatedStockStatus
+            })
+        
+    } catch (err) {
+        console.log(err)
+        res.json({
+            message: "Error while updating stock"
+
+        })
+    }
+}
 
 module.exports = {
-    createProduct, getAllProduct
+    createProduct, getAllProduct, updateStockStatus
 }

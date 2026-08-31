@@ -86,6 +86,35 @@ const UpdateByAge = async(req,res)=>{
     }
 }
 
+const UpdateData = async(req,res)=>{
+    try{
+
+    const data = req.query.id;
+   
+    if(data){
+    const UpdatedData = await UserModel.findByIdAndUpdate(data,req.query)
+    if(UpdatedData){
+        res.status(200).json({
+            message : "Data Modified ",
+            data : UpdatedData
+        })
+    }else{
+        res.json({
+            message : "Not found"
+        })
+    }}
+    else{
+        res.json({
+            message : "Id not found"
+        })
+    }
+    }catch(err){
+        res.json({
+            message : "Err ",
+            err : err
+        })
+    }
+}
 module.exports = {
-    getAllUSers, getUSerById, SearchUser,CreateUser,DeleteUser,UpdateUSer,UpdateByAge
+    getAllUSers, getUSerById, SearchUser,CreateUser,DeleteUser,UpdateUSer,UpdateByAge,UpdateData
 }

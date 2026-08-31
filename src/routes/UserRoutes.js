@@ -8,4 +8,5 @@ router.post("/user",userController.CreateUser)
 router.delete("/user/:id",userController.DeleteUser)
 router.put("/user/:id",userController.UpdateUSer)
 router.put("/userByAge/:age",userController.UpdateByAge)
+router.put("/userdata",userController.UpdateData)
 module.exports = router;          
