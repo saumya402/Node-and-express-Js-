@@ -1,6 +1,7 @@
 
 const UserModel = require("../models/UserModel")
 const userModel = require("../models/UserModel")
+const mailSend = require("../utilites/MailUtils")
 const getAllUSers = async (req, res) => {
     const users = await userModel.find()
     res.json({ message: "get all users..", data: users })
@@ -24,8 +25,10 @@ const SearchUser = async (req, res) => {
 const CreateUser = async(req,res)=>{
     try{
     // console.log("Req body",req.body)
-    res.json({message:"ok"})
+    
     const savedUser = userModel.insertOne(req.body)
+     //mailSend(req.body.email,"","")
+     await mailSend(req.body.email,"Testing royal","hi someone from me")
     res.json({message : "Data fetch from postman",data:savedUser})
     }
     catch(err) {
@@ -34,7 +37,7 @@ const CreateUser = async(req,res)=>{
 }
 const DeleteUser = async(req,res)=>{
     const id = req.params.id;
-    const deletedUser = await UserModel.findByIdAndDelete(id)
+    const deletedUser = await UserModel.findByIdAndDelete(id,{new : true})
     if(deletedUser){
         res.status(200).json({
             message : "User Deleted Successfully",

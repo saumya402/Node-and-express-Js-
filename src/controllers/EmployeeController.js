@@ -16,7 +16,7 @@ const getAllEmp = async (req, res) => {
 const Search = async(req,res)=>{
         const data = req.query;
         res.json({data : data})
-        
+         
 }
 const create = async(req,res)=>{
      res.json({message:"ok"})
