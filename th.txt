@@ -33,3 +33,6 @@ app.get("/usertable", (req, res) => {
                 ${get}
         `)
 })
+PORT=3001
+EMAIL=saumyap8180@gmail.com
+PASSWORD=odpm hhpz nqxc ebxc
