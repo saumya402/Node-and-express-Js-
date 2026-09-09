@@ -27,7 +27,17 @@ const userModel = new Schema({
     password : {
         type : String,
         required : true,
-    }
+    },
+    phone : {
+        type : Number,
+    },
+    profilepicUrl:{
+        type:String
+    },
+  ProfileThumb : [{
+        type : String,
+
+    }],
 })
 
 module.exports = mongoose.model("users",userModel)

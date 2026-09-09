@@ -22,12 +22,27 @@ const SearchUser = async (req, res) => {
     const data = req.query;
     res.json({ data: data })
 }
+// const CreateUser = async(req,res)=>{
+//     try{
+//     // console.log("Req body",req.body)
+//     console.log("req file..",req.file);
+//      const savedUser = await userModel.insertOne({...req.body,profilepicUrl:req.file.path})
+//      //mailSend(req.body.email,"","")
+//      await mailSend(req.body.email,"Testing royal","hi someone from me")
+//     res.json({message : "Data fetch from postman",data:savedUser})
+//     }
+//     catch(err) {
+//         res.json({err:err})
+//     }
+// }
 const CreateUser = async(req,res)=>{
     try{
     // console.log("Req body",req.body)
-    
-    const savedUser = userModel.insertOne(req.body)
-     //mailSend(req.body.email,"","")
+    console.log("req file..",req.file);
+    //  const savedUser = await userModel.insertOne({...req.body,profilepicUrl:req.file.path})
+    //  //mailSend(req.body.email,"","")
+   const  u = req.files.map((file) => file.path);
+    const savedUser = await userModel.insertOne({...req.body,profilepicUrl:u[0].path,ProfileThumb:u});
      await mailSend(req.body.email,"Testing royal","hi someone from me")
     res.json({message : "Data fetch from postman",data:savedUser})
     }
@@ -35,6 +50,7 @@ const CreateUser = async(req,res)=>{
         res.json({err:err})
     }
 }
+
 const DeleteUser = async(req,res)=>{
     const id = req.params.id;
     const deletedUser = await UserModel.findByIdAndDelete(id,{new : true})
@@ -119,5 +135,5 @@ const UpdateData = async(req,res)=>{
     }
 }
 module.exports = {
-    getAllUSers, getUSerById, SearchUser,CreateUser,DeleteUser,UpdateUSer,UpdateByAge,UpdateData
+    getAllUSers,SearchUser, getUSerById, CreateUser,DeleteUser,UpdateUSer,UpdateByAge,UpdateData
 }
