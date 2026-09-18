@@ -21,12 +21,12 @@ const userModel = new Schema({
     },
     email : {
         type : String,
-        required : true,
+        // required : true,
         unique : true,
     },
     password : {
         type : String,
-        required : true,
+        // required : true,
     },
     phone : {
         type : Number,
@@ -40,4 +40,4 @@ const userModel = new Schema({
     }],
 })
 
-module.exports = mongoose.model("users",userModel)
+module.exports = mongoose.model("users1",userModel)

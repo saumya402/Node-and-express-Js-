@@ -2,6 +2,9 @@
 const UserModel = require("../models/UserModel")
 const userModel = require("../models/UserModel")
 const mailSend = require("../utilites/MailUtils")
+const uploadtoCloud = require("../utilites/CloudinaryUpload")
+const xlsx = require("xlsx");
+const bcrypt = require("bcrypt");
 const getAllUSers = async (req, res) => {
     const users = await userModel.find()
     res.json({ message: "get all users..", data: users })
@@ -26,7 +29,9 @@ const SearchUser = async (req, res) => {
 //     try{
 //     // console.log("Req body",req.body)
 //     console.log("req file..",req.file);
-//      const savedUser = await userModel.insertOne({...req.body,profilepicUrl:req.file.path})
+//     const cloudinaryrespones = await uploadtoCloud(req.file.path)
+//     console.log("cloudinary respones",cloudinaryrespones)
+//      const savedUser = await userModel.insertOne({...req.body,profilepicUrl:cloudinaryrespones.secure_url})
 //      //mailSend(req.body.email,"","")
 //      await mailSend(req.body.email,"Testing royal","hi someone from me")
 //     res.json({message : "Data fetch from postman",data:savedUser})
@@ -41,10 +46,19 @@ const CreateUser = async(req,res)=>{
     console.log("req file..",req.file);
     //  const savedUser = await userModel.insertOne({...req.body,profilepicUrl:req.file.path})
     //  //mailSend(req.body.email,"","")
-   const  u = req.files.map((file) => file.path);
-    const savedUser = await userModel.insertOne({...req.body,profilepicUrl:u[0].path,ProfileThumb:u});
-     await mailSend(req.body.email,"Testing royal","hi someone from me")
+    
+    // const u = req.files.map((file) => uploadtoCloud(req.file.path));
+    const u = await Promise.all(
+        req.files.map((file)=>uploadtoCloud(file.path)),
+    );
+    const urls = u.map((url)=>url.secure_url)
+    console.log("urls",urls);
+     const pass = bcrypt.hashSync(req.body.password,10)
+    const savedUser = await userModel.insertOne({...req.body,profilepicUrl:u[0].path,ProfileThumb:urls,password:pass});
+    //  await mailSend(req.body.email,"Testing royal","hi someone from me")
     res.json({message : "Data fetch from postman",data:savedUser})
+     
+    
     }
     catch(err) {
         res.json({err:err})
@@ -134,6 +148,40 @@ const UpdateData = async(req,res)=>{
         })
     }
 }
-module.exports = {
-    getAllUSers,SearchUser, getUSerById, CreateUser,DeleteUser,UpdateUSer,UpdateByAge,UpdateData
+const CreateMultipleUser = async(req,res)=>{
+
+    console.log("files",req.file)
+    const workbook = xlsx.readFile(req.file.path)
+    const sheetNames = workbook.Sheets[workbook.SheetNames[0]];
+    const u = xlsx.utils.sheet_to_json(sheetNames);
+    console.log(u)
+    const SavedUser = await userModel.insertMany({u})
+    res.json({message:"ok"})
 }
+const LoginUser = async(req,res)=>{
+    try{
+        const email = req.body.email
+        const FoundUserFromEmail = await userModel.findOne({email : email})
+        if(FoundUserFromEmail){
+            if(bcrypt.compareSync(req.body.password,FoundUserFromEmail.password))
+            res.json({
+                message : "Login Success"
+            })
+        }
+        else{
+             res.json({
+                message : "Login  Failed"
+            })
+        }
+    }catch(err){
+        console.log(err)
+          res.json({
+                message : "err",
+                err : err
+            })
+
+    }
+}
+module.exports = {
+    getAllUSers,SearchUser, getUSerById, CreateUser,DeleteUser,UpdateUSer,UpdateByAge,UpdateData, CreateMultipleUser,LoginUser
+}   
