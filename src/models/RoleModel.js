@@ -7,7 +7,8 @@ const RoleModel = new Schema ({
     },
     status : {
         type : Boolean
-    }
+    },
+    
 })
 
 module.exports = mongoose.model("roles",RoleModel)

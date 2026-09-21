@@ -38,6 +38,10 @@ const userModel = new Schema({
         type : String,
 
     }],
+    Reoleid : {
+         type : mongoose.Schema.ObjectId,
+         ref : "roles"
+    }
 })
 
 module.exports = mongoose.model("users1",userModel)

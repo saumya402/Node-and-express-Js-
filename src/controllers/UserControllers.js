@@ -5,8 +5,10 @@ const mailSend = require("../utilites/MailUtils")
 const uploadtoCloud = require("../utilites/CloudinaryUpload")
 const xlsx = require("xlsx");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken")
+const secret = "royal"
 const getAllUSers = async (req, res) => {
-    const users = await userModel.find()
+    const users = await userModel.find().populate("Reoleid")
     res.json({ message: "get all users..", data: users })
 }
 const getUSerById = async (req, res) => {
@@ -158,30 +160,40 @@ const CreateMultipleUser = async(req,res)=>{
     const SavedUser = await userModel.insertMany({u})
     res.json({message:"ok"})
 }
-const LoginUser = async(req,res)=>{
-    try{
-        const email = req.body.email
-        const FoundUserFromEmail = await userModel.findOne({email : email})
-        if(FoundUserFromEmail){
-            if(bcrypt.compareSync(req.body.password,FoundUserFromEmail.password))
+const LoginUser = async (req, res) => {
+    try {
+        const email = req.body.email;
+        const FoundUserFromEmail = await userModel.findOne({
+            email: email
+        });
+        if (!FoundUserFromEmail) {
             res.json({
-                message : "Login Success"
-            })
+                message: "User not found"
+            });
         }
-        else{
-             res.json({
-                message : "Login  Failed"
-            })
-        }
-    }catch(err){
-        console.log(err)
-          res.json({
-                message : "err",
-                err : err
-            })
+        if (bcrypt.compareSync(req.body.password, FoundUserFromEmail.password)) {
+            // const token = jwt.sign(FoundUserFromEmail.toObject(), secret);
+             const token = jwt.sign({id:FoundUserFromEmail._id},secret,{expiresIn:60});
 
+            res.json({
+                message: "Login Success",
+                data: token
+            });
+        } else {
+            res.json({
+                message: "Login Failed"
+            });
+        }
+    } catch (err) {
+
+        console.log(err);
+
+       res.json({
+            message: "Error",
+            err: err
+        });
     }
-}
+};
 module.exports = {
     getAllUSers,SearchUser, getUSerById, CreateUser,DeleteUser,UpdateUSer,UpdateByAge,UpdateData, CreateMultipleUser,LoginUser
 }   
