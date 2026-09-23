@@ -38,9 +38,12 @@ const userModel = new Schema({
         type : String,
 
     }],
-    Reoleid : {
+    Roleid : {
          type : mongoose.Schema.ObjectId,
          ref : "roles"
+    },
+    refreshToken : {
+        type : String,
     }
 })
 

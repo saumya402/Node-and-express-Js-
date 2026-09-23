@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken")
 const secret = "royal"
 const getAllUSers = async (req, res) => {
-    const users = await userModel.find().populate("Reoleid")
+    const users = await userModel.find().populate("Roleid")
     res.json({ message: "get all users..", data: users })
 }
 const getUSerById = async (req, res) => {
@@ -56,8 +56,11 @@ const CreateUser = async(req,res)=>{
     const urls = u.map((url)=>url.secure_url)
     console.log("urls",urls);
      const pass = bcrypt.hashSync(req.body.password,10)
+   
     const savedUser = await userModel.insertOne({...req.body,profilepicUrl:u[0].path,ProfileThumb:urls,password:pass});
-    //  await mailSend(req.body.email,"Testing royal","hi someone from me")
+    const token = jwt.sign({id : savedUser._id},secret,{expiresIn : '6m'})
+    const updated =  await userModel.findByIdAndUpdate(savedUser._id,{refreshToken:token})
+    console.log(updated)
     res.json({message : "Data fetch from postman",data:savedUser})
      
     
@@ -173,7 +176,7 @@ const LoginUser = async (req, res) => {
         }
         if (bcrypt.compareSync(req.body.password, FoundUserFromEmail.password)) {
             // const token = jwt.sign(FoundUserFromEmail.toObject(), secret);
-             const token = jwt.sign({id:FoundUserFromEmail._id},secret,{expiresIn:60});
+             const token = jwt.sign({id:FoundUserFromEmail._id},secret);
 
             res.json({
                 message: "Login Success",

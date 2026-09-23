@@ -3,10 +3,11 @@ require("dotenv").config()
 const app = express() // ap makes the function of the express which can be accessible in the app.listen..
 const getDbConnection = require("./src/utilites/DbConnection")
 getDbConnection()
-app.use(express.json())
+app.use(express.json())// this is written to give the data in raw form in postman..
 
 const userRoutes = require("./src/routes/UserRoutes")
-app.use("/user",userRoutes)
+app.use("/user",userRoutes) // parenting routing as it will be eaiser to found the url 
+
 
 const EmployeeRoutes = require("./src/routes/EmployeeRoutes")
 app.use("/Employees",EmployeeRoutes)

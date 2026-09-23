@@ -2,11 +2,13 @@ const router = require("express").Router()
 const userController = require("../controllers/UserControllers")
 // const TestMiddleware = require("../middlewares/TestMiddleware");
 const a = require("../middlewares/AuthMiddleware")
+const b = require("../middlewares/AuthMiddleware")
 const zodMiddleware = require("../middlewares/ZodMiddleware");
 const uservalidate = require("../ValidationSchema/UserValidation");
 const uplaod = require("../middlewares/UploadMiddleware")
 // router.get("/users",userController.getAllUSers)
-router.get("/users",a,userController.getAllUSers)
+// router.get("/users",a("Admin"),userController.getAllUSers)
+router.get("/users",b(["Admin","Manager"]),userController.getAllUSers)
 router.get("/user/:id",userController.getUSerById)
 router.get("/Search",userController.SearchUser)
 // router.post("/user",TestMiddleware("Admin"),userController.CreateUser)
