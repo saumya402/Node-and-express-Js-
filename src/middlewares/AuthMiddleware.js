@@ -55,6 +55,7 @@ const MultiAuthMiddleware = (roles)=> async(req,res,next)=>{
 
                 if(verifiedUser && roles.includes(verifiedUser.Roleid?.name)){
                 console.log(verifiedUser)
+                // req.user = verifiedUser
                 next() 
 
                 }else{

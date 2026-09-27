@@ -180,7 +180,9 @@ const LoginUser = async (req, res) => {
 
             res.json({
                 message: "Login Success",
-                data: token
+                data: token,
+                refreshToken : FoundUserFromEmail.refreshToken
+
             });
         } else {
             res.json({
@@ -196,7 +198,34 @@ const LoginUser = async (req, res) => {
             err: err
         });
     }
-};
+}
+const getAccessToken = async(req,res)=>{
+    try {
+        const refreshToken = req.body.refreshToken
+        const userFound = await userModel.findOne({refreshToken: refreshToken})
+        if(userFound){
+
+           const newToken = jwt.sign({id :userFound._id},secret)
+           res.json({
+            message : "New token",
+            data : newToken
+           })
+
+
+        }else{
+            res.json(404)({
+                message : "User not found"
+            })
+        }
+
+    }catch(err){
+        console.log(err);
+        res.json({
+            message: "Error",
+            err: err
+        });
+    }
+}
 module.exports = {
-    getAllUSers,SearchUser, getUSerById, CreateUser,DeleteUser,UpdateUSer,UpdateByAge,UpdateData, CreateMultipleUser,LoginUser
+    getAllUSers,SearchUser, getUSerById, CreateUser,DeleteUser,UpdateUSer,UpdateByAge,UpdateData, CreateMultipleUser,LoginUser,getAccessToken
 }   

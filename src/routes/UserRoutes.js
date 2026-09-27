@@ -20,4 +20,5 @@ router.put("/user/:id",userController.UpdateUSer)
 router.put("/userByAge/:age",userController.UpdateByAge)
 router.put("/userdata",userController.UpdateData)
 router.post("/login",userController.LoginUser)
+router.post("/refresh",userController.getAccessToken)
 module.exports = router;          
